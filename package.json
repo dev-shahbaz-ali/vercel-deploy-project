@@ -1,31 +1,17 @@
 {
   "name": "vercel-deploy-project",
   "version": "1.0.0",
-  "type": "module",
-  "main": "api/index.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node api/index.js",
-    "dev": "nodemon api/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [
-    "express",
-    "vercel",
-    "contacts",
-    "mongodb"
-  ],
-  "author": "Your Name",
-  "license": "MIT",
-  "description": "Contact management app deployed on Vercel",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
   "dependencies": {
-    "express": "^4.18.2",
     "ejs": "^3.1.10",
-    "mongoose": "^8.0.0",
-    "mongoose-paginate-v2": "^1.7.0",
-    "serverless-http": "^3.2.0",
-    "dotenv": "^16.3.0"
-  },
-  "devDependencies": {
+    "express": "^5.1.0",
     "nodemon": "^3.1.11"
   }
 }
