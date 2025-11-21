@@ -1,51 +1,46 @@
-const express = require("express");
+import express from "express";
+import serverless from "serverless-http";
+import ContactRoutes from "../routes/contacts.routes.js";
+import { connectDB } from "../config/database.js";
+import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
+
+// Fix for ES modules __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config();
+
+// Connect to database
+connectDB();
+
 const app = express();
 
-// Middleware
+// Middleware - Fix paths for Vercel
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "../views"));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "../public")));
 app.use(express.json());
 
-// Root route - shows when someone visits yourdomain.vercel.app/
-app.get("/", (req, res) => {
-  res.json({
-    success: true,
-    message: "🚀 Welcome to Vercel Express API!",
-    timestamp: new Date().toISOString(),
-    endpoints: {
-      root: "/",
-      api: "/api",
-      health: "/health",
-    },
-  });
-});
+// Routes
+app.use("/", ContactRoutes);
 
-// Your existing API route
-app.get("/api", (req, res) => {
-  res.json({
-    success: true,
-    message: "🚀 API is working perfectly!",
-    timestamp: new Date().toISOString(),
-  });
-});
-
-// Additional health check route
+// Health check
 app.get("/health", (req, res) => {
   res.json({
     status: "✅ Healthy",
+    message: "Contact App is running on Vercel",
     timestamp: new Date().toISOString(),
-    service: "Vercel Express API",
   });
 });
 
 // Export for Vercel
-module.exports = app;
+export default serverless(app);
 
-// Local development only
-if (require.main === module) {
-  const PORT = process.env.PORT || 4000;
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running at http://localhost:${PORT}`);
-    console.log(`🏠 Root: http://localhost:${PORT}/`);
-    console.log(`🎯 API: http://localhost:${PORT}/api`);
-    console.log(`❤️ Health: http://localhost:${PORT}/health`);
-  });
-}
+// Local development
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running at http://localhost:${PORT}`);
+});
